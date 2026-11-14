@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:bingo_sggw/core/utils/join_link.dart';
 import 'package:bingo_sggw/core/utils/room_code.dart';
 import 'package:bingo_sggw/features/board_creation/models/bingo_board.dart';
 import 'package:bingo_sggw/features/gameplay/models/bingo_tile.dart';
@@ -138,7 +139,7 @@ class _HostLobbyScreenState extends State<HostLobbyScreen> {
 
   Widget _buildLobby(RoomSession session, String roomId) {
     final theme = Theme.of(context);
-    final joinUrl = 'bingo://join?room=$roomId';
+    final joinUrl = buildJoinLink(roomId);
 
     return Center(
       child: ConstrainedBox(
@@ -160,7 +161,7 @@ class _HostLobbyScreenState extends State<HostLobbyScreen> {
               ),
               const SizedBox(height: 4),
               Text(
-                'Zeskanuj kod w aplikacji lub przez Google Lens, aby dołączyć',
+                'Zeskanuj kod aparatem telefonu albo wpisz kod pokoju, aby dołączyć',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: theme.colorScheme.outline),
               ),

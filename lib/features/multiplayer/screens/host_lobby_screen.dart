@@ -6,6 +6,7 @@ import 'package:bingo_sggw/features/gameplay/models/bingo_tile.dart';
 import 'package:bingo_sggw/features/gameplay/screens/bingo_board_screen.dart';
 import 'package:bingo_sggw/features/multiplayer/services/peer_room_service.dart';
 import 'package:bingo_sggw/features/multiplayer/services/room_service.dart';
+import 'package:bingo_sggw/features/multiplayer/widgets/copyable_room_code.dart';
 import 'package:bingo_sggw/features/multiplayer/widgets/players_list.dart';
 
 class HostLobbyScreen extends StatefulWidget {
@@ -147,11 +148,14 @@ class _HostLobbyScreenState extends State<HostLobbyScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                'Pokój: $roomId',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
+              Center(
+                child: CopyableRoomCode(
+                  roomId: roomId,
+                  prefix: 'Pokój: ',
+                  iconSize: 22,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const SizedBox(height: 4),

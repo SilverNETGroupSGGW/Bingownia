@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:bingo_sggw/features/gameplay/models/bingo_tile.dart';
 import 'package:bingo_sggw/core/utils/bingo_checker.dart';
 import 'package:bingo_sggw/features/multiplayer/services/room_service.dart';
+import 'package:bingo_sggw/features/multiplayer/widgets/copyable_room_code.dart';
 
 class BingoBoardScreen extends StatefulWidget {
   final int gridSize;
@@ -144,8 +145,9 @@ class _BingoBoardScreenState extends State<BingoBoardScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         title,
-        Text(
-          'Kod pokoju: ${session.roomId}',
+        CopyableRoomCode(
+          roomId: session.roomId,
+          prefix: 'Kod pokoju: ',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),

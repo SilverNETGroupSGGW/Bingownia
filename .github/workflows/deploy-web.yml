@@ -28,7 +28,12 @@ jobs:
 
       - run: flutter pub get
 
-      - run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+      - run: >
+          flutter build web --release
+          --base-href "/${{ github.event.repository.name }}/"
+          --dart-define=TURN_SERVER=${{ secrets.TURN_SERVER }}
+          --dart-define=TURN_USERNAME=${{ secrets.TURN_USERNAME }}
+          --dart-define=TURN_PASSWORD=${{ secrets.TURN_PASSWORD }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

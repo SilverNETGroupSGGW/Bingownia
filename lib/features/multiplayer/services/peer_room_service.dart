@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:peerdart/peerdart.dart';
 import 'package:bingo_sggw/features/board_creation/models/bingo_board.dart';
 import 'package:bingo_sggw/features/multiplayer/models/player.dart';
+import 'package:bingo_sggw/features/multiplayer/services/ice_servers.dart';
 import 'package:bingo_sggw/features/multiplayer/services/room_service.dart';
 
 class PeerRoomService implements RoomService {
@@ -10,6 +11,15 @@ class PeerRoomService implements RoomService {
 
   static const _prefix = 'bingo-sggw-';
   static const _timeout = Duration(seconds: 12);
+
+  PeerOptions _options() {
+    return PeerOptions(
+      config: {
+        'iceServers': buildIceServers(),
+        'sdpSemantics': 'unified-plan',
+      },
+    );
+  }
 
   @override
   Future<RoomSession> hostRoom({
@@ -20,7 +30,7 @@ class PeerRoomService implements RoomService {
       'Nie udało się utworzyć pokoju. Sprawdź połączenie z internetem.',
     );
 
-    final peer = Peer(id: '$_prefix$roomId');
+    final peer = Peer(id: '$_prefix$roomId', options: _options());
     final opened = Completer<void>();
 
     peer.on('open').listen((_) {
@@ -49,7 +59,7 @@ class PeerRoomService implements RoomService {
       'Nie udało się dołączyć do pokoju $roomId. Sprawdź kod i połączenie z internetem.',
     );
 
-    final peer = Peer();
+    final peer = Peer(options: _options());
     final connected = Completer<DataConnection>();
 
     peer.on('error').listen((_) {

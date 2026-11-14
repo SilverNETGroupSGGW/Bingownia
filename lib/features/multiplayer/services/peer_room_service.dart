@@ -47,7 +47,7 @@ class PeerRoomService implements RoomService {
       rethrow;
     }
 
-    return _HostSession(peer, hostName);
+    return _HostSession(peer, roomId, hostName);
   }
 
   @override
@@ -75,7 +75,7 @@ class PeerRoomService implements RoomService {
     try {
       final conn =
           await connected.future.timeout(_timeout, onTimeout: () => throw failure);
-      return _GuestSession(peer, conn, name);
+      return _GuestSession(peer, conn, roomId, name);
     } catch (_) {
       peer.dispose();
       rethrow;
@@ -87,14 +87,18 @@ Map<String, dynamic> _playerToJson(Player player) =>
     {'name': player.name, 'isHost': player.isHost};
 
 class _HostSession implements RoomSession {
-  _HostSession(this._peer, String hostName)
+  _HostSession(this._peer, this.roomId, String hostName)
       : _host = Player(name: hostName, isHost: true) {
     _peer.on<DataConnection>('connection').listen(_onConnection);
   }
 
+  @override
+  final String roomId;
+
   final Peer _peer;
   final Player _host;
   final _guests = <DataConnection, Player>{};
+  Map<String, dynamic>? _startMessage;
   late final _players = ValueNotifier<List<Player>>([_host]);
   final _startedBoard = ValueNotifier<BingoBoard?>(null);
   final _closed = ValueNotifier<bool>(false);
@@ -121,8 +125,15 @@ class _HostSession implements RoomSession {
 
       if (data['type'] == 'join') {
         final name = (data['name'] as String? ?? '').trim();
+        final isNew = !_guests.containsKey(conn);
         _guests[conn] = Player(name: name.isEmpty ? 'Gracz' : name);
         _publishPlayers();
+
+        final startMessage = _startMessage;
+        if (isNew && startMessage != null) {
+          conn.send(startMessage);
+          conn.send({'type': 'tiles', 'checked': _checked.value.toList()});
+        }
       } else if (data['type'] == 'toggle' && data['index'] is int) {
         toggleTile(data['index'] as int);
       }
@@ -149,7 +160,8 @@ class _HostSession implements RoomSession {
 
   @override
   Future<void> startGame(BingoBoard board) async {
-    _broadcast({'type': 'start', 'board': board.toJson()});
+    _startMessage = {'type': 'start', 'board': board.toJson()};
+    _broadcast(_startMessage!);
   }
 
   @override
@@ -180,7 +192,7 @@ class _HostSession implements RoomSession {
 }
 
 class _GuestSession implements RoomSession {
-  _GuestSession(this._peer, this._conn, this._name) {
+  _GuestSession(this._peer, this._conn, this.roomId, this._name) {
     _conn.on('data').listen(_onData);
     _conn.on('close').listen((_) {
       if (!_disposed) _closed.value = true;
@@ -195,6 +207,9 @@ class _GuestSession implements RoomSession {
       }
     });
   }
+
+  @override
+  final String roomId;
 
   final Peer _peer;
   final DataConnection _conn;

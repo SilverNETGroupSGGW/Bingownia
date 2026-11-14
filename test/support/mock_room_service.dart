@@ -14,7 +14,11 @@ class MockRoomService implements RoomService {
     required String roomId,
     required String hostName,
   }) async {
-    return MockRoomSession([Player(name: hostName, isHost: true)], joiners);
+    return MockRoomSession(
+      [Player(name: hostName, isHost: true)],
+      joiners,
+      roomId: roomId,
+    );
   }
 
   @override
@@ -26,6 +30,7 @@ class MockRoomService implements RoomService {
       [const Player(name: 'Prowadzący', isHost: true), Player(name: name)],
       joiners,
       isHost: false,
+      roomId: roomId,
     );
   }
 }
@@ -35,6 +40,7 @@ class MockRoomSession implements RoomSession {
     List<Player> initial,
     List<String> joiners, {
     this.isHost = true,
+    this.roomId = 'ABC123',
   }) : _players = ValueNotifier(initial) {
     var index = 0;
     _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
@@ -55,6 +61,9 @@ class MockRoomSession implements RoomSession {
 
   @override
   final bool isHost;
+
+  @override
+  final String roomId;
 
   @override
   ValueListenable<List<Player>> get players => _players;

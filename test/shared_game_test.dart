@@ -68,6 +68,23 @@ void main() {
     await tester.pump(const Duration(seconds: 2));
   });
 
+  testWidgets('plansza w pokoju pokazuje kod pokoju', (WidgetTester tester) async {
+    await pumpGame(tester, session(isHost: false));
+
+    expect(find.text('Kod pokoju: ABC123'), findsOneWidget);
+  });
+
+  testWidgets('plansza solo nie pokazuje kodu pokoju',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: BingoBoardScreen(gridSize: 3, title: 'Solo', initialTiles: tiles()),
+      ),
+    );
+
+    expect(find.textContaining('Kod pokoju'), findsNothing);
+  });
+
   testWidgets('host widzi przycisk resetu', (WidgetTester tester) async {
     await pumpGame(tester, session(isHost: true));
 

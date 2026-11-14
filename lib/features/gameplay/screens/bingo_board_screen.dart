@@ -133,6 +133,27 @@ class _BingoBoardScreenState extends State<BingoBoardScreen> {
     }
   }
 
+  Widget _buildTitle() {
+    final title = Text(
+      widget.title ?? 'Bingo ${widget.gridSize}x${widget.gridSize}',
+    );
+    final session = widget.session;
+    if (session == null) return title;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        title,
+        Text(
+          'Kod pokoju: ${session.roomId}',
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final checkedCount = _tiles.where((t) => t.isChecked).length;
@@ -143,7 +164,7 @@ class _BingoBoardScreenState extends State<BingoBoardScreen> {
       children: [
         Scaffold(
           appBar: AppBar(
-            title: Text(widget.title ?? 'Bingo ${widget.gridSize}x${widget.gridSize}'),
+            title: _buildTitle(),
             centerTitle: true,
             actions: [
               if (widget.session?.isHost ?? true)

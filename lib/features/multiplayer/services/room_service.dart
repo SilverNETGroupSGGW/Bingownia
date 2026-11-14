@@ -12,6 +12,7 @@ class RoomException implements Exception {
 }
 
 abstract class RoomSession {
+  String get roomId;
   ValueListenable<List<Player>> get players;
   ValueListenable<BingoBoard?> get startedBoard;
   ValueListenable<bool> get closed;

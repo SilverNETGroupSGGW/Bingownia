@@ -1,4 +1,4 @@
-package com.example.bingo_sggw
+package com.silver.bingownia
 
 import io.flutter.embedding.android.FlutterActivity
 

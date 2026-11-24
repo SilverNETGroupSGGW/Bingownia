@@ -1,6 +1,7 @@
 [tools]
 # Matches the revision in .metadata (3.47.2); bundles the Dart SDK
 flutter = "3.47"
+java = "temurin-17"
 # Chrome for Testing, used by `flutter run -d chrome`
 "http:chrome" = { version = "155.0.8059.39", url = "https://storage.googleapis.com/chrome-for-testing-public/{{ version }}/linux64/chrome-linux64.zip", strip_components = 1, bin_path = "." }
 
@@ -16,3 +17,39 @@ run = [
   "flutter precache --web",
   "flutter pub get",
 ]
+
+[tasks.check]
+description = "Analyze the code and run the tests"
+run = [
+  "flutter analyze",
+  "flutter test",
+]
+
+[tasks."build:apk"]
+description = "Build the release APKs, one per ABI"
+run = '''
+flutter build apk --release --split-per-abi \
+  --android-project-arg=force-version-code-ignoring-abi=true \
+  --dart-define=TURN_SERVER="${TURN_SERVER:-}" \
+  --dart-define=TURN_USERNAME="${TURN_USERNAME:-}" \
+  --dart-define=TURN_PASSWORD="${TURN_PASSWORD:-}"
+'''
+
+[tasks."build:appbundle"]
+description = "Build the release App Bundle"
+run = '''
+flutter build appbundle --release \
+  --dart-define=TURN_SERVER="${TURN_SERVER:-}" \
+  --dart-define=TURN_USERNAME="${TURN_USERNAME:-}" \
+  --dart-define=TURN_PASSWORD="${TURN_PASSWORD:-}"
+'''
+
+[tasks."build:web"]
+description = "Build the web app"
+usage = 'flag "--channel <channel>" default="prod"'
+run = '''
+flutter build web --release \
+  --dart-define=TURN_SERVER="${TURN_SERVER:-}" \
+  --dart-define=TURN_USERNAME="${TURN_USERNAME:-}" \
+  --dart-define=TURN_PASSWORD="${TURN_PASSWORD:-}"
+'''

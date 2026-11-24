@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  release:
+    types: [published, released]
+  workflow_dispatch:
+    inputs:
+      track:
+        description: Track to publish to
+        type: choice
+        options: [alpha, production]
+      platforms:
+        description: Platforms to publish
+        type: choice
+        options: [android, all]
+        default: android
+
+permissions: {}
+
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    permissions:
+      contents: write
+      id-token: write
+      pages: write
+    uses: SilverNETGroupSGGW/Infra/.github/workflows/flutter-release.yml@5902c11d9b87a4983028c934fc72585864dbc1e5 # main
+    with:
+      android-package: com.silver.bingownia
+      play-beta-track: alpha
+      publish-track: ${{ inputs.track }}
+      publish-platforms: ${{ inputs.platforms }}
+      environment: release
+    secrets:
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}

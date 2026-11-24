@@ -14,7 +14,7 @@ void main() {
     await tester.pumpWidget(const BingoSGGW());
     await tester.pumpAndSettle();
 
-    expect(find.text('Bingo SGGW'), findsWidgets);
+    expect(find.text('Bingownia'), findsWidgets);
     expect(find.text('Moje plansze'), findsOneWidget);
     expect(find.text('Nowa plansza'), findsOneWidget);
     expect(find.text('Kod pokoju'), findsOneWidget);

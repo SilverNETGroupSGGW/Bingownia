@@ -46,7 +46,7 @@ class _BingoSGGWState extends State<BingoSGGW> {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: _navigatorKey,
-      title: 'Bingo SGGW',
+      title: 'Bingownia',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

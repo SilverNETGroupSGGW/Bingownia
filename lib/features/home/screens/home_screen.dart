@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Bingo SGGW',
+                      'Bingownia',
                       textAlign: TextAlign.center,
                       style: theme.textTheme.displaySmall?.copyWith(
                         fontWeight: FontWeight.bold,

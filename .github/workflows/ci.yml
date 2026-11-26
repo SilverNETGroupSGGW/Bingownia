@@ -16,4 +16,4 @@ jobs:
   ci:
     permissions:
       contents: read
-    uses: SilverNETGroupSGGW/Infra/.github/workflows/flutter-ci.yml@5902c11d9b87a4983028c934fc72585864dbc1e5 # main
+    uses: SilverNETGroupSGGW/Infra/.github/workflows/flutter-ci.yml@3b35a9015317b135fca144bf4f5432f9b0cb960d # main

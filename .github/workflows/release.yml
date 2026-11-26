@@ -27,9 +27,8 @@ jobs:
       contents: write
       id-token: write
       pages: write
-    uses: SilverNETGroupSGGW/Infra/.github/workflows/flutter-release.yml@5902c11d9b87a4983028c934fc72585864dbc1e5 # main
+    uses: SilverNETGroupSGGW/Infra/.github/workflows/flutter-release.yml@3b35a9015317b135fca144bf4f5432f9b0cb960d # main
     with:
-      android-package: com.silver.bingownia
       play-beta-track: alpha
       publish-track: ${{ inputs.track }}
       publish-platforms: ${{ inputs.platforms }}
